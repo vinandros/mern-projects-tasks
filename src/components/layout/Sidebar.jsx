@@ -1,7 +1,7 @@
 import React from "react";
 import NewProject from "../projects/NewProject";
 import ProjectList from "../projects/ProjectList";
-import projectContext from "../../context/projects/projectContext";
+
 const Sidebar = () => {
   return (
     <aside>
