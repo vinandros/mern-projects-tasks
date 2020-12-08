@@ -9,6 +9,7 @@ const ProjectList = () => {
   //get projects
   React.useEffect(() => {
     requestProjects([]);
+    // eslint-disable-next-line
   }, []);
 
   if (projects.length === 0) {

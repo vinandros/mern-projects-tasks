@@ -1,4 +1,5 @@
 import React from "react";
+import { v4 } from "uuid";
 import TaskContext from "./taskContext";
 import TaskReducer from "./taskReducer";
 import {
@@ -7,6 +8,9 @@ import {
   TASK_VALIDATION,
   DELETE_TASK,
   TASK_STATE,
+  ACTIVE_TASK,
+  UPDATE_TASK,
+  CLEAR_ACTIVE_TASK,
 } from "../../types";
 
 const TaskState = (prop) => {
@@ -51,6 +55,7 @@ const TaskState = (prop) => {
     ],
     projectTasks: [],
     taskError: false,
+    activeTask: {},
   };
 
   const [state, dispatch] = React.useReducer(TaskReducer, initialState);
@@ -63,6 +68,7 @@ const TaskState = (prop) => {
   };
 
   const addNewTask = (taskData) => {
+    taskData.id = v4();
     dispatch({
       type: ADD_NEW_TASK,
       payload: taskData,
@@ -89,16 +95,40 @@ const TaskState = (prop) => {
     });
   };
 
+  const setActiveTask = (task) => {
+    dispatch({
+      type: ACTIVE_TASK,
+      payload: task,
+    });
+  };
+
+  const updateTask = (task) => {
+    dispatch({
+      type: UPDATE_TASK,
+      payload: task,
+    });
+  };
+
+  const clearActiveTask = () => {
+    dispatch({
+      type: CLEAR_ACTIVE_TASK,
+    });
+  };
+
   return (
     <TaskContext.Provider
       value={{
         projectTasks: state.projectTasks,
         taskError: state.taskError,
+        activeTask: state.activeTask,
         getProjectsTaks,
         addNewTask,
         taskValidation,
         deleteTask,
         changeTaskState,
+        setActiveTask,
+        updateTask,
+        clearActiveTask,
       }}
     >
       {prop.children}

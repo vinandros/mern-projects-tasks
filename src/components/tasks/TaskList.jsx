@@ -5,11 +5,18 @@ import TaskContext from "../../context/tasks/taskContext";
 
 const TaskList = () => {
   const { activeProject, deleteProject } = React.useContext(ProjectContext);
-  const { projectTasks } = React.useContext(TaskContext);
+  const { projectTasks, getProjectsTaks } = React.useContext(TaskContext);
+
+  //get projects
+  React.useEffect(() => {
+    getProjectsTaks(activeProject.id);
+    // eslint-disable-next-line
+  }, [activeProject]);
 
   if (!activeProject.id) {
     return <h2>Choose a project</h2>;
   }
+
   return (
     <>
       <h2> Project: {activeProject.projectName}</h2>

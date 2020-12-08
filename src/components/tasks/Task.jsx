@@ -2,9 +2,12 @@ import React from "react";
 import TaskContext from "../../context/tasks/taskContext";
 
 const Task = ({ taskData }) => {
-  const { deleteTask, getProjectsTaks, changeTaskState } = React.useContext(
-    TaskContext
-  );
+  const {
+    deleteTask,
+    getProjectsTaks,
+    changeTaskState,
+    setActiveTask,
+  } = React.useContext(TaskContext);
 
   const handleTaskState = (task) => {
     if (task.taskState) {
@@ -13,6 +16,10 @@ const Task = ({ taskData }) => {
       task.taskState = true;
     }
     changeTaskState(task);
+  };
+
+  const handleEdit = (task) => {
+    setActiveTask(task);
   };
 
   return (
@@ -38,7 +45,11 @@ const Task = ({ taskData }) => {
         )}
       </div>
       <div className="acciones">
-        <button type="button" className="btn btn-primario">
+        <button
+          type="button"
+          onClick={() => handleEdit(taskData)}
+          className="btn btn-primario"
+        >
           Edit
         </button>
         <button

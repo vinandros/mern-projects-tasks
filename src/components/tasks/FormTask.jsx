@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import ProjectContext from "../../context/projects/projectContext";
 import TaskContext from "../../context/tasks/taskContext";
@@ -10,11 +10,23 @@ const FormTask = () => {
     taskValidation,
     taskError,
     getProjectsTaks,
+    activeTask,
+    updateTask,
+    clearActiveTask,
   } = React.useContext(TaskContext);
 
   const [taskData, setTaskData] = React.useState({
     taskName: "",
   });
+  useEffect(() => {
+    if (activeTask.taskName) {
+      setTaskData(activeTask);
+    } else {
+      setTaskData({
+        taskName: "",
+      });
+    }
+  }, [activeTask]);
 
   const { taskName } = taskData;
 
@@ -31,13 +43,19 @@ const FormTask = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (taskName.trim() === "") {
       taskValidation();
       return null;
     }
-    taskData.projectId = activeProject.id;
-    taskData.taskState = false;
-    addNewTask(taskData);
+    if (activeTask.id === undefined) {
+      taskData.projectId = activeProject.id;
+      taskData.taskState = false;
+      addNewTask(taskData);
+    } else {
+      updateTask(taskData);
+      clearActiveTask();
+    }
 
     //get active project task
     getProjectsTaks(taskData.projectId);
@@ -65,7 +83,7 @@ const FormTask = () => {
           <input
             className="btn btn-primario btn-submit btn-block"
             type="submit"
-            value="Add new task"
+            value={activeTask.id ? "Save" : "Add new task"}
           />
         </div>
       </form>
