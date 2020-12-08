@@ -47,6 +47,6 @@ export default function reducer(state, action) {
         activeProject: {},
       };
     default:
-      break;
+      return state;
   }
 }

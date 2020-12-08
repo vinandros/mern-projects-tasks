@@ -1,10 +1,11 @@
 import React from "react";
 import Task from "./Task";
 import ProjectContext from "../../context/projects/projectContext";
+import TaskContext from "../../context/tasks/taskContext";
 
 const TaskList = () => {
   const { activeProject, deleteProject } = React.useContext(ProjectContext);
-  const projectTaks = [];
+  const { projectTasks } = React.useContext(TaskContext);
 
   if (!activeProject.id) {
     return <h2>Choose a project</h2>;
@@ -13,10 +14,12 @@ const TaskList = () => {
     <>
       <h2> Project: {activeProject.projectName}</h2>
       <ul className="listado-tareas">
-        {projectTaks.length === 0 ? (
-          <li className="tarea"></li>
+        {projectTasks.length === 0 ? (
+          <li className="tarea">
+            <p>There is any Task.</p>
+          </li>
         ) : (
-          projectTaks.map((task) => <Task taskData={task} />)
+          projectTasks.map((task) => <Task key={task.id} taskData={task} />)
         )}
       </ul>
       <button
