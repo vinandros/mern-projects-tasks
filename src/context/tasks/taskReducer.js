@@ -3,6 +3,7 @@ import {
   ADD_NEW_TASK,
   TASK_VALIDATION,
   DELETE_TASK,
+  TASK_STATE,
 } from "../../types";
 
 export default function reducer(state, action) {
@@ -29,6 +30,13 @@ export default function reducer(state, action) {
       return {
         ...state,
         tasks: state.tasks.filter((task) => task.id !== action.payload),
+      };
+    case TASK_STATE:
+      return {
+        ...state,
+        tasks: state.projectTasks.filter((task) =>
+          task.id === action.payload.id ? action.payload : task
+        ),
       };
     default:
       return state;
