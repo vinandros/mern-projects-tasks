@@ -1,12 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import alertContext from "../../context/alerts/alertContext";
+
 const SingUp = () => {
+  const { alert, showAlert } = React.useContext(alertContext);
+
   const [formData, setFormData] = React.useState({
     email: "",
     password: "",
     passwordConfirmation: "",
     userName: "",
   });
+  const { email, password, userName, passwordConfirmation } = formData;
 
   const handleChange = (e) => {
     setFormData({
@@ -17,11 +22,29 @@ const SingUp = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    //check fields
+    if (
+      email.trim() === "" ||
+      password.trim() === "" ||
+      userName.trim() === "" ||
+      passwordConfirmation.trim() === ""
+    ) {
+      showAlert("All fields are required", "alerta-error");
+      return;
+    }
+    // check password restrictions
+    if (password.trim().length < 6) {
+      showAlert("Passwords must have at least 6 caracters", "alerta-error");
+      return;
+    }
+    if (password.trim() !== passwordConfirmation.trim()) {
+      showAlert("passwords must match", "alerta-error");
+    }
   };
 
-  const { email, password, userName, passwordConfirmation } = formData;
   return (
     <div className="form-usuario">
+      {alert && <div className={`alerta ${alert.category}`}>{alert.msg}</div>}
       <div className="contenedor-form sombra-dark">
         <h1>Sign Up</h1>
         <form onSubmit={handleSubmit}>
