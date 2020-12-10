@@ -24,9 +24,9 @@ const Task = ({ taskData }) => {
 
   return (
     <li className="tarea sombra">
-      <p>{taskData.taskName}</p>
+      <p>{taskData.name}</p>
       <div className="estado">
-        {taskData.taskState ? (
+        {taskData.state ? (
           <button
             type="button"
             className="completo"
@@ -55,7 +55,7 @@ const Task = ({ taskData }) => {
         <button
           type="button"
           onClick={() => {
-            deleteTask(taskData.id);
+            deleteTask(taskData._id);
             getProjectsTaks(taskData.projectId);
           }}
           className="btn btn-secundario"

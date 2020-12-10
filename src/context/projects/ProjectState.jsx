@@ -1,7 +1,7 @@
 import React from "react";
-import { v4 } from "uuid";
 import projectContext from "./projectContext";
 import projectReducer from "./projectReducer";
+import axiosClient from "../../config/axios";
 import {
   FORM_PROJECT,
   REQUEST_PROJECTS,
@@ -9,25 +9,19 @@ import {
   FORM_VALIDATION,
   ACTIVE_PROJECT,
   DELETE_PROJECT,
+  PROJECT_ERROR,
 } from "../../types";
 
 const ProjectState = (props) => {
-  const projects = [
-    { id: 1, projectName: "ecommerce" },
-    { id: 2, projectName: "play projects" },
-    { id: 3, projectName: "agnci of FBI" },
-  ];
-
   const initialState = {
     projects: [],
     form: false,
     formError: false,
     activeProject: {},
+    msg: null,
   };
 
   const [state, dispatch] = React.useReducer(projectReducer, initialState);
-
-  // actions creators
 
   const showProjectForm = () => {
     dispatch({
@@ -35,20 +29,38 @@ const ProjectState = (props) => {
     });
   };
 
-  const requestProjects = () => {
-    dispatch({
-      type: REQUEST_PROJECTS,
-      payload: projects,
-    });
+  const requestProjects = async () => {
+    try {
+      const res = await axiosClient.get("/projects");
+      const projects = res.data.projects;
+      dispatch({
+        type: REQUEST_PROJECTS,
+        payload: projects,
+      });
+    } catch (error) {
+      const alert = { msg: "Something went wrong", category: "alerta-error" };
+      dispatch({
+        type: PROJECT_ERROR,
+        payload: alert,
+      });
+    }
   };
 
-  const addNewProject = (project) => {
-    project.id = v4();
-
-    dispatch({
-      type: ADD_NEW_PROJECT,
-      payload: project,
-    });
+  const addNewProject = async (project) => {
+    try {
+      const res = await axiosClient.post("/projects", project);
+      const newProject = res.data;
+      dispatch({
+        type: ADD_NEW_PROJECT,
+        payload: newProject,
+      });
+    } catch (error) {
+      const alert = { msg: "Something went wrong", category: "alerta-error" };
+      dispatch({
+        type: PROJECT_ERROR,
+        payload: alert,
+      });
+    }
   };
 
   const showError = () => {
@@ -64,11 +76,20 @@ const ProjectState = (props) => {
     });
   };
 
-  const deleteProject = (projectId) => {
-    dispatch({
-      type: DELETE_PROJECT,
-      payload: projectId,
-    });
+  const deleteProject = async (projectId) => {
+    try {
+      await axiosClient.delete(`/projects/${projectId}`);
+      dispatch({
+        type: DELETE_PROJECT,
+        payload: projectId,
+      });
+    } catch (error) {
+      const alert = { msg: "Something went wrong", category: "alerta-error" };
+      dispatch({
+        type: PROJECT_ERROR,
+        payload: alert,
+      });
+    }
   };
 
   return (
@@ -76,6 +97,7 @@ const ProjectState = (props) => {
       value={{
         projects: state.projects,
         form: state.form,
+        msg: state.msg,
         formError: state.formError,
         activeProject: state.activeProject,
         showProjectForm,

@@ -5,6 +5,7 @@ import {
   FORM_VALIDATION,
   ACTIVE_PROJECT,
   DELETE_PROJECT,
+  PROJECT_ERROR,
 } from "../../types";
 export default function reducer(state, action) {
   switch (action.type) {
@@ -35,16 +36,21 @@ export default function reducer(state, action) {
       return {
         ...state,
         activeProject: state.projects.filter(
-          (project) => project.id === action.payload
+          (project) => project._id === action.payload
         )[0],
       };
     case DELETE_PROJECT:
       return {
         ...state,
         projects: state.projects.filter(
-          (project) => project.id !== action.payload
+          (project) => project._id !== action.payload
         ),
         activeProject: {},
+      };
+    case PROJECT_ERROR:
+      return {
+        ...state,
+        msg: action.payload,
       };
     default:
       return state;

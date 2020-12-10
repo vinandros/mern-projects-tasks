@@ -9,28 +9,28 @@ const TaskList = () => {
 
   //get projects
   React.useEffect(() => {
-    getProjectsTaks(activeProject.id);
+    getProjectsTaks(activeProject._id);
     // eslint-disable-next-line
   }, [activeProject]);
 
-  if (!activeProject.id) {
+  if (!activeProject._id) {
     return <h2>Choose a project</h2>;
   }
 
   return (
     <>
-      <h2> Project: {activeProject.projectName}</h2>
+      <h2> {activeProject.name}</h2>
       <ul className="listado-tareas">
         {projectTasks.length === 0 ? (
           <li className="tarea">
             <p>There is any Task.</p>
           </li>
         ) : (
-          projectTasks.map((task) => <Task key={task.id} taskData={task} />)
+          projectTasks.map((task) => <Task key={task._id} taskData={task} />)
         )}
       </ul>
       <button
-        onClick={() => deleteProject(activeProject.id)}
+        onClick={() => deleteProject(activeProject._id)}
         className="btn btn-eliminar"
         type="button"
       >

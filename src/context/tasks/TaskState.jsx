@@ -1,7 +1,7 @@
 import React from "react";
-import { v4 } from "uuid";
 import TaskContext from "./taskContext";
 import TaskReducer from "./taskReducer";
+import axiosClient from "../../config/axios";
 import {
   PROJECT_TASKS,
   ADD_NEW_TASK,
@@ -15,44 +15,6 @@ import {
 
 const TaskState = (prop) => {
   const initialState = {
-    tasks: [
-      {
-        taskName: "choose framework",
-        taskState: true,
-        projectId: 1,
-        id: 1,
-      },
-      {
-        taskName: "choose hosting",
-        taskState: true,
-        projectId: 2,
-        id: 2,
-      },
-      {
-        taskName: "choose pay library",
-        taskState: false,
-        projectId: 3,
-        id: 3,
-      },
-      {
-        taskName: "choose framework",
-        taskState: true,
-        projectId: 2,
-        id: 4,
-      },
-      {
-        taskName: "choose hosting",
-        taskState: true,
-        projectId: 3,
-        id: 5,
-      },
-      {
-        taskName: "choose pay library",
-        taskState: false,
-        projectId: 1,
-        id: 6,
-      },
-    ],
     projectTasks: [],
     taskError: false,
     activeTask: {},
@@ -60,19 +22,27 @@ const TaskState = (prop) => {
 
   const [state, dispatch] = React.useReducer(TaskReducer, initialState);
 
-  const getProjectsTaks = (projectId) => {
-    dispatch({
-      type: PROJECT_TASKS,
-      payload: projectId,
-    });
+  const getProjectsTaks = async (projectId) => {
+    try {
+      const res = await axiosClient.get("/tasks", { params: { projectId } });
+      const tasks = res.data;
+      console.log(tasks);
+      // dispatch({
+      //   type: PROJECT_TASKS,
+      //   payload: projectId,
+      // });
+    } catch (error) {}
   };
 
-  const addNewTask = (taskData) => {
-    taskData.id = v4();
-    dispatch({
-      type: ADD_NEW_TASK,
-      payload: taskData,
-    });
+  const addNewTask = async (taskData) => {
+    try {
+      const res = await axiosClient.post("/tasks", taskData);
+      const task = res.data.task;
+      dispatch({
+        type: ADD_NEW_TASK,
+        payload: task,
+      });
+    } catch (error) {}
   };
 
   const taskValidation = () => {

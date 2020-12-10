@@ -12,12 +12,12 @@ const Project = ({ projectData }) => {
       <button
         type="button"
         onClick={() => {
-          setActiveProject(projectData.id);
-          getProjectsTaks(projectData.id);
+          setActiveProject(projectData._id);
+          getProjectsTaks(projectData._id);
         }}
         className="btn btn-blank"
       >
-        {projectData.projectName}
+        {projectData.name}
       </button>
     </li>
   );

@@ -3,7 +3,7 @@ import ProjectContext from "../../context/projects/projectContext";
 
 const NewProject = () => {
   const [newProjectData, setNewProjectData] = React.useState({
-    projectName: "",
+    name: "",
   });
 
   const {
@@ -21,15 +21,15 @@ const NewProject = () => {
     });
   };
 
-  const { projectName } = newProjectData;
+  const { name } = newProjectData;
   const onSubmit = (e) => {
     e.preventDefault();
-    if (projectName === "") {
+    if (name === "") {
       showError();
       return;
     }
     addNewProject(newProjectData);
-    setNewProjectData({ projectName: "" });
+    setNewProjectData({ name: "" });
   };
 
   return (
@@ -41,10 +41,10 @@ const NewProject = () => {
         <form onSubmit={onSubmit} className="formulario-nuevo-proyecto">
           <input
             type="text"
-            name="projectName"
-            id="projectName"
+            name="name"
+            id="name"
             className="input-text"
-            value={projectName}
+            value={name}
             onChange={handleChange}
           />
 

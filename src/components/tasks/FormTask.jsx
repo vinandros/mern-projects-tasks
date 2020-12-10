@@ -16,21 +16,21 @@ const FormTask = () => {
   } = React.useContext(TaskContext);
 
   const [taskData, setTaskData] = React.useState({
-    taskName: "",
+    name: "",
   });
   useEffect(() => {
-    if (activeTask.taskName) {
+    if (activeTask.name) {
       setTaskData(activeTask);
     } else {
       setTaskData({
-        taskName: "",
+        name: "",
       });
     }
   }, [activeTask]);
 
-  const { taskName } = taskData;
+  const { name } = taskData;
 
-  if (!activeProject.id) {
+  if (!activeProject._id) {
     return null;
   }
 
@@ -44,13 +44,13 @@ const FormTask = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (taskName.trim() === "") {
+    if (name.trim() === "") {
       taskValidation();
       return null;
     }
-    if (activeTask.id === undefined) {
-      taskData.projectId = activeProject.id;
-      taskData.taskState = false;
+    if (activeTask._id === undefined) {
+      taskData.projectId = activeProject._id;
+      taskData.state = false;
       addNewTask(taskData);
     } else {
       updateTask(taskData);
@@ -61,7 +61,7 @@ const FormTask = () => {
     getProjectsTaks(taskData.projectId);
 
     setTaskData({
-      taskName: "",
+      name: "",
     });
   };
 
@@ -71,11 +71,11 @@ const FormTask = () => {
         <div className="contenedor-input">
           <input
             type="text"
-            name="taskName"
+            name="name"
             className="input-text"
-            id="taskName"
+            id="name"
             placeholder="Task's name here."
-            value={taskName}
+            value={name}
             onChange={handleChange}
           />
         </div>
@@ -83,7 +83,7 @@ const FormTask = () => {
           <input
             className="btn btn-primario btn-submit btn-block"
             type="submit"
-            value={activeTask.id ? "Save" : "Add new task"}
+            value={activeTask._id ? "Save" : "Add new task"}
           />
         </div>
       </form>

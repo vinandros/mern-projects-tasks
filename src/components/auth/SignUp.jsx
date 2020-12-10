@@ -1,9 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import alertContext from "../../context/alerts/alertContext";
+import authenticationContext from "../../context/authentication/authenticationCotext";
 
-const SingUp = () => {
+const SingUp = ({ history }) => {
   const { alert, showAlert } = React.useContext(alertContext);
+  const { signupUser, authentication, msg } = React.useContext(
+    authenticationContext
+  );
+
+  useEffect(() => {
+    if (authentication) {
+      history.push("/projects");
+    }
+    if (msg) {
+      showAlert(msg.msg, msg.category);
+    }
+  }, [msg, authentication, history]);
 
   const [formData, setFormData] = React.useState({
     email: "",
@@ -40,6 +53,12 @@ const SingUp = () => {
     if (password.trim() !== passwordConfirmation.trim()) {
       showAlert("passwords must match", "alerta-error");
     }
+
+    signupUser({
+      userName,
+      password,
+      email,
+    });
   };
 
   return (

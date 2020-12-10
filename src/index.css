@@ -90,6 +90,10 @@ a {
   background-color: transparent;
 }
 
+.cerrar-sesion {
+  color: var(--blanco);
+}
+
 .btn-eliminar {
   background-color: red;
   color: white;

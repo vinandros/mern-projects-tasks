@@ -15,14 +15,14 @@ export default function reducer(state, action) {
       // console.log(state);
       return {
         ...state,
-        projectTasks: state.tasks.filter(
+        projectTasks: state.projectTasks.filter(
           (task) => task.projectId === action.payload
         ),
       };
     case ADD_NEW_TASK:
       return {
         ...state,
-        tasks: [action.payload, ...state.tasks],
+        projectTasks: [action.payload, ...state.projectTasks],
         taskError: false,
       };
     case TASK_VALIDATION:
@@ -33,14 +33,16 @@ export default function reducer(state, action) {
     case DELETE_TASK:
       return {
         ...state,
-        tasks: state.tasks.filter((task) => task.id !== action.payload),
+        projectTasks: state.projectTasks.filter(
+          (task) => task._id !== action.payload
+        ),
       };
     case UPDATE_TASK:
     case TASK_STATE:
       return {
         ...state,
-        tasks: state.tasks.map((task) =>
-          task.id === action.payload.id ? action.payload : task
+        projectTasks: state.projectTasks.map((task) =>
+          task._id === action.payload._id ? action.payload : task
         ),
       };
     case ACTIVE_TASK:

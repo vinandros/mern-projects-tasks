@@ -9,6 +9,8 @@ import {
 import React, { useReducer } from "react";
 import authenticationReducer from "./authenticationReducer";
 import authenticationContext from "./authenticationCotext";
+import axiosCliente from "../../config/axios";
+import tokenAuth from "../../config/tokenAuth";
 
 const AuthenticationState = (props) => {
   const initialState = {
@@ -16,9 +18,79 @@ const AuthenticationState = (props) => {
     authentication: null,
     user: null,
     msg: null,
+    loading: true,
   };
 
   const [state, dispatch] = useReducer(authenticationReducer, initialState);
+
+  const signupUser = async (data) => {
+    try {
+      const res = await axiosCliente.post("/users", data);
+      // console.log(res);
+      dispatch({
+        type: SIGNUP_SUCCESS,
+        payload: res.data,
+      });
+
+      //get user Data
+      getAuthenticatedUser();
+    } catch (error) {
+      // console.log(error.response.data.msg);
+      const alert = { msg: error.response.data.msg, category: "alerta-error" };
+      dispatch({
+        type: SIGNUP_FAIL,
+        payload: alert,
+      });
+    }
+  };
+
+  const getAuthenticatedUser = async () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      //send token by headers
+      tokenAuth(token);
+    }
+    try {
+      const res = await axiosCliente.get("/auth");
+      // console.log(res);
+      dispatch({
+        type: GET_ACTIVE_USER,
+        payload: res.data,
+      });
+    } catch (error) {
+      // console.log(error.response);
+      dispatch({
+        type: LOGIN_ERROR,
+      });
+    }
+  };
+
+  const login = async (data) => {
+    try {
+      const res = await axiosCliente.post("/auth", data);
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: res.data,
+      });
+
+      //get user Data
+      getAuthenticatedUser();
+    } catch (error) {
+      // console.log(error.response.data.msg);
+      const alert = { msg: error.response.data.msg, category: "alerta-error" };
+      dispatch({
+        type: LOGIN_ERROR,
+        payload: alert,
+      });
+    }
+  };
+
+  const logout = () => {
+    dispatch({
+      type: LOGOUT,
+    });
+  };
+
   return (
     <authenticationContext.Provider
       value={{
@@ -26,6 +98,11 @@ const AuthenticationState = (props) => {
         authentication: state.authentication,
         user: state.user,
         msg: state.msg,
+        loading: state.loading,
+        signupUser,
+        login,
+        getAuthenticatedUser,
+        logout,
       }}
     >
       {props.children}
