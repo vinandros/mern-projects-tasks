@@ -2,9 +2,11 @@ import React, { useEffect } from "react";
 
 import ProjectContext from "../../context/projects/projectContext";
 import TaskContext from "../../context/tasks/taskContext";
+import AlertContext from "../../context/alerts/alertContext";
 
 const FormTask = () => {
   const { activeProject } = React.useContext(ProjectContext);
+  const { alert, showAlert } = React.useContext(AlertContext);
   const {
     addNewTask,
     taskValidation,
@@ -13,6 +15,7 @@ const FormTask = () => {
     activeTask,
     updateTask,
     clearActiveTask,
+    msg,
   } = React.useContext(TaskContext);
 
   const [taskData, setTaskData] = React.useState({
@@ -26,7 +29,11 @@ const FormTask = () => {
         name: "",
       });
     }
-  }, [activeTask]);
+    if (msg) {
+      showAlert(msg.msg, msg.category);
+    }
+    // eslint-disable-next-line
+  }, [activeTask, msg]);
 
   const { name } = taskData;
 
@@ -88,6 +95,7 @@ const FormTask = () => {
         </div>
       </form>
       {taskError && <p className="mensaje error">Task name is required.</p>}
+      {alert && <div className={`alerta ${alert.category}`}>{alert.msg}</div>}
     </div>
   );
 };

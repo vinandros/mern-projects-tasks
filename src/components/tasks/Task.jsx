@@ -10,11 +10,6 @@ const Task = ({ taskData }) => {
   } = React.useContext(TaskContext);
 
   const handleTaskState = (task) => {
-    if (task.state) {
-      task.state = false;
-    } else {
-      task.state = true;
-    }
     updateTask(task);
   };
 

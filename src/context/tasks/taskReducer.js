@@ -6,6 +6,7 @@ import {
   ACTIVE_TASK,
   UPDATE_TASK,
   CLEAR_ACTIVE_TASK,
+  TASK_ERROR,
 } from "../../types";
 
 export default function reducer(state, action) {
@@ -50,7 +51,11 @@ export default function reducer(state, action) {
         ...state,
         activeTask: {},
       };
-
+    case TASK_ERROR:
+      return {
+        ...state,
+        msg: action.payload,
+      };
     default:
       return state;
   }

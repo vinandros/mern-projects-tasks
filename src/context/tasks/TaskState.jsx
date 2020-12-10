@@ -10,6 +10,7 @@ import {
   ACTIVE_TASK,
   UPDATE_TASK,
   CLEAR_ACTIVE_TASK,
+  TASK_ERROR,
 } from "../../types";
 
 const TaskState = (prop) => {
@@ -17,6 +18,7 @@ const TaskState = (prop) => {
     projectTasks: [],
     taskError: false,
     activeTask: {},
+    msg: null,
   };
 
   const [state, dispatch] = React.useReducer(TaskReducer, initialState);
@@ -29,7 +31,13 @@ const TaskState = (prop) => {
         type: PROJECT_TASKS,
         payload: tasks,
       });
-    } catch (error) {}
+    } catch (error) {
+      const alert = { msg: "Something went wrong", category: "alerta-error" };
+      dispatch({
+        type: TASK_ERROR,
+        payload: alert,
+      });
+    }
   };
 
   const addNewTask = async (taskData) => {
@@ -40,7 +48,13 @@ const TaskState = (prop) => {
         type: ADD_NEW_TASK,
         payload: task,
       });
-    } catch (error) {}
+    } catch (error) {
+      const alert = { msg: "Something went wrong", category: "alerta-error" };
+      dispatch({
+        type: TASK_ERROR,
+        payload: alert,
+      });
+    }
   };
 
   const taskValidation = () => {
@@ -56,7 +70,13 @@ const TaskState = (prop) => {
         type: DELETE_TASK,
         payload: taskId,
       });
-    } catch (error) {}
+    } catch (error) {
+      const alert = { msg: "Something went wrong", category: "alerta-error" };
+      dispatch({
+        type: TASK_ERROR,
+        payload: alert,
+      });
+    }
   };
 
   const setActiveTask = (task) => {
@@ -74,7 +94,13 @@ const TaskState = (prop) => {
         type: UPDATE_TASK,
         payload: updatedTask,
       });
-    } catch (error) {}
+    } catch (error) {
+      const alert = { msg: "Something went wrong", category: "alerta-error" };
+      dispatch({
+        type: TASK_ERROR,
+        payload: alert,
+      });
+    }
   };
 
   const clearActiveTask = () => {
@@ -89,6 +115,7 @@ const TaskState = (prop) => {
         projectTasks: state.projectTasks,
         taskError: state.taskError,
         activeTask: state.activeTask,
+        msg: state.msg,
         getProjectsTaks,
         addNewTask,
         taskValidation,
