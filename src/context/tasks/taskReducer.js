@@ -3,7 +3,6 @@ import {
   ADD_NEW_TASK,
   TASK_VALIDATION,
   DELETE_TASK,
-  TASK_STATE,
   ACTIVE_TASK,
   UPDATE_TASK,
   CLEAR_ACTIVE_TASK,
@@ -12,12 +11,9 @@ import {
 export default function reducer(state, action) {
   switch (action.type) {
     case PROJECT_TASKS:
-      // console.log(state);
       return {
         ...state,
-        projectTasks: state.projectTasks.filter(
-          (task) => task.projectId === action.payload
-        ),
+        projectTasks: action.payload,
       };
     case ADD_NEW_TASK:
       return {
@@ -38,7 +34,6 @@ export default function reducer(state, action) {
         ),
       };
     case UPDATE_TASK:
-    case TASK_STATE:
       return {
         ...state,
         projectTasks: state.projectTasks.map((task) =>

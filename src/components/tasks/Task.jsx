@@ -5,17 +5,17 @@ const Task = ({ taskData }) => {
   const {
     deleteTask,
     getProjectsTaks,
-    changeTaskState,
+    updateTask,
     setActiveTask,
   } = React.useContext(TaskContext);
 
   const handleTaskState = (task) => {
-    if (task.taskState) {
-      task.taskState = false;
+    if (task.state) {
+      task.state = false;
     } else {
-      task.taskState = true;
+      task.state = true;
     }
-    changeTaskState(task);
+    updateTask(task);
   };
 
   const handleEdit = (task) => {
@@ -55,7 +55,7 @@ const Task = ({ taskData }) => {
         <button
           type="button"
           onClick={() => {
-            deleteTask(taskData._id);
+            deleteTask(taskData._id, taskData.projectId);
             getProjectsTaks(taskData.projectId);
           }}
           className="btn btn-secundario"

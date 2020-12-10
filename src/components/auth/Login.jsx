@@ -21,6 +21,7 @@ const Login = ({ history }) => {
     if (msg) {
       showAlert(msg.msg, msg.category);
     }
+    // eslint-disable-next-line
   }, [msg, authentication, history]);
 
   const handleChange = (e) => {

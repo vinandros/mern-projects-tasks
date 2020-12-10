@@ -7,7 +7,6 @@ import {
   ADD_NEW_TASK,
   TASK_VALIDATION,
   DELETE_TASK,
-  TASK_STATE,
   ACTIVE_TASK,
   UPDATE_TASK,
   CLEAR_ACTIVE_TASK,
@@ -25,12 +24,11 @@ const TaskState = (prop) => {
   const getProjectsTaks = async (projectId) => {
     try {
       const res = await axiosClient.get("/tasks", { params: { projectId } });
-      const tasks = res.data;
-      console.log(tasks);
-      // dispatch({
-      //   type: PROJECT_TASKS,
-      //   payload: projectId,
-      // });
+      const tasks = res.data.tasks;
+      dispatch({
+        type: PROJECT_TASKS,
+        payload: tasks,
+      });
     } catch (error) {}
   };
 
@@ -51,18 +49,14 @@ const TaskState = (prop) => {
     });
   };
 
-  const deleteTask = (taskId) => {
-    dispatch({
-      type: DELETE_TASK,
-      payload: taskId,
-    });
-  };
-
-  const changeTaskState = (task) => {
-    dispatch({
-      type: TASK_STATE,
-      payload: task,
-    });
+  const deleteTask = async (taskId, projectId) => {
+    try {
+      await axiosClient.delete(`/tasks/${taskId}`, { params: { projectId } });
+      dispatch({
+        type: DELETE_TASK,
+        payload: taskId,
+      });
+    } catch (error) {}
   };
 
   const setActiveTask = (task) => {
@@ -72,11 +66,15 @@ const TaskState = (prop) => {
     });
   };
 
-  const updateTask = (task) => {
-    dispatch({
-      type: UPDATE_TASK,
-      payload: task,
-    });
+  const updateTask = async (task) => {
+    try {
+      const res = await axiosClient.put(`/tasks/${task._id}`, task);
+      const updatedTask = res.data.task;
+      dispatch({
+        type: UPDATE_TASK,
+        payload: updatedTask,
+      });
+    } catch (error) {}
   };
 
   const clearActiveTask = () => {
@@ -95,7 +93,6 @@ const TaskState = (prop) => {
         addNewTask,
         taskValidation,
         deleteTask,
-        changeTaskState,
         setActiveTask,
         updateTask,
         clearActiveTask,

@@ -9,7 +9,7 @@ const TaskList = () => {
 
   //get projects
   React.useEffect(() => {
-    getProjectsTaks(activeProject._id);
+    if (activeProject._id) getProjectsTaks(activeProject._id);
     // eslint-disable-next-line
   }, [activeProject]);
 

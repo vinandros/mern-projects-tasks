@@ -26,7 +26,6 @@ const AuthenticationState = (props) => {
   const signupUser = async (data) => {
     try {
       const res = await axiosCliente.post("/users", data);
-      // console.log(res);
       dispatch({
         type: SIGNUP_SUCCESS,
         payload: res.data,
@@ -35,7 +34,6 @@ const AuthenticationState = (props) => {
       //get user Data
       getAuthenticatedUser();
     } catch (error) {
-      // console.log(error.response.data.msg);
       const alert = { msg: error.response.data.msg, category: "alerta-error" };
       dispatch({
         type: SIGNUP_FAIL,
@@ -52,13 +50,11 @@ const AuthenticationState = (props) => {
     }
     try {
       const res = await axiosCliente.get("/auth");
-      // console.log(res);
       dispatch({
         type: GET_ACTIVE_USER,
         payload: res.data,
       });
     } catch (error) {
-      // console.log(error.response);
       dispatch({
         type: LOGIN_ERROR,
       });
@@ -76,7 +72,6 @@ const AuthenticationState = (props) => {
       //get user Data
       getAuthenticatedUser();
     } catch (error) {
-      // console.log(error.response.data.msg);
       const alert = { msg: error.response.data.msg, category: "alerta-error" };
       dispatch({
         type: LOGIN_ERROR,
